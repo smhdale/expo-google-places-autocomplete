@@ -23,6 +23,13 @@ data class PredictionResult(
     val places: List<PlaceDetails>
 ) : Record
 
+data class AddressSegment(
+    @Field
+    val name: String,
+    @Field
+    val types: List<String>
+) : Record
+
 data class DiscoveredPlace(
     @Field
     val name: String?,
@@ -33,7 +40,7 @@ data class DiscoveredPlace(
     @Field
     val formattedAddress: String?,
     @Field
-    val addressComponents: List<String>?
+    val addressComponents: List<AddressSegment>?
 ) : Record
 
 data class Coordinate(

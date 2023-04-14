@@ -42,6 +42,7 @@ class ExpoGooglePlacesAutocompleteModule : Module() {
     private fun findPlaces(query: String, config: RequestConfig?, promise: Promise) {
         request.query = query
         request.countries = config?.countries ?: emptyList()
+        request.typesFilter = config?.types ?: emptyList()
 
         placesClient.findAutocompletePredictions(request.build())
             .addOnSuccessListener { response ->

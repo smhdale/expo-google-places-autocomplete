@@ -3,6 +3,7 @@ package expo.community.modules.googleplacesautocomplete
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.AddressComponent
 
 internal fun mapFromPlace(place: Place) = DiscoveredPlace(
     name = place.name,
@@ -15,6 +16,11 @@ internal fun mapFromPlace(place: Place) = DiscoveredPlace(
 internal fun mapFromCoordinate(coordinate: LatLng?) = Coordinate(
     latitude = coordinate?.latitude ?: 0.0,
     longitude = coordinate?.longitude ?: 0.0
+)
+
+internal fun mapFromAddressComponent(component: AddressComponent) = AddressSegment(
+    name = component.name,
+    types = component.types
 )
 
 internal fun mapFromPrediction(prediction: AutocompletePrediction) = PlaceDetails(

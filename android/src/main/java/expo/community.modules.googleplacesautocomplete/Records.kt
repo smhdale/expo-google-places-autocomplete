@@ -6,6 +6,7 @@ import expo.modules.kotlin.records.Record
 internal class RequestConfig : Record {
     @Field
     var countries: List<String> = emptyList()
+    var types: List<String> = emptyList()
 }
 
 
