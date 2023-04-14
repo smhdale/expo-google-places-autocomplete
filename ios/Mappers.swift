@@ -10,7 +10,10 @@ struct Mappers {
       "formattedAddress": place.formattedAddress,
       "addressComponents": place.addressComponents.map({ comp in
         comp.map {
-          $0.name
+          [
+            "name": $0.name,
+            "types": $0.types
+          ]
         }
       }) ?? []
     ]

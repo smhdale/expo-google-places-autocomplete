@@ -40,6 +40,7 @@ public class ExpoGooglePlacesAutocompleteModule: Module, PlacesResultHandler {
     self.currentContext = PlacesAutocompleteContext(promise: promise, placesDelegate: placesDelegate)
 
     filter.countries = config?.countries ?? []
+    filter.types = config?.types ?? []
 
     self.fetcher.sourceTextHasChanged(query)
   }
