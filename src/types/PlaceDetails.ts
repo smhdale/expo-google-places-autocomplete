@@ -1,3 +1,4 @@
+import { AddressComponent } from "./AddressComponent";
 import type { Coordinate } from "./Coordinate";
 
 /**
@@ -8,5 +9,5 @@ export interface PlaceDetails {
   placeId?: string;
   coordinate: Coordinate;
   formattedAddress?: string;
-  addressComponents: string[];
+  addressComponents: AddressComponent[];
 }

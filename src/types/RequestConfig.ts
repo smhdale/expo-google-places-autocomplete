@@ -10,4 +10,9 @@ export interface RequestConfig {
    * The maximum number of countries is 5
    */
   countries: CountryCode[];
+  /**
+   * An array of place types that restricts results to those types
+   * @see https://developers.google.com/maps/documentation/places/web-service/supported_types
+   */
+  types: string[];
 }
