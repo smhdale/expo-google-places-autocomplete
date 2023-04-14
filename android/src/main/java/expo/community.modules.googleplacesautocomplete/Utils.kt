@@ -10,7 +10,7 @@ internal fun mapFromPlace(place: Place) = DiscoveredPlace(
     placeId = place.id,
     coordinate = mapFromCoordinate(place.latLng),
     formattedAddress = place.address,
-    addressComponents = place.addressComponents?.asList()?.map { it.name } ?: emptyList()
+    addressComponents = place.addressComponents?.asList()?.map { mapFromAddressComponent(it) } ?: emptyList()
 )
 
 internal fun mapFromCoordinate(coordinate: LatLng?) = Coordinate(
