@@ -9,7 +9,7 @@ struct PlacesAutocompleteContext {
 public class ExpoGooglePlacesAutocompleteModule: Module, PlacesResultHandler {
   private var currentContext: PlacesAutocompleteContext?
   private var fetcher: GMSAutocompleteFetcher!
-  private let token = GMSAutocompleteSessionToken.init()
+  private var token = GMSAutocompleteSessionToken.init()
   private let filter = GMSAutocompleteFilter()
 
   public func definition() -> ModuleDefinition {
@@ -33,6 +33,11 @@ public class ExpoGooglePlacesAutocompleteModule: Module, PlacesResultHandler {
     }.runOnQueue(.main)
   }
 
+  private func newAutocompleteSession() {
+    self.token = GMSAutocompleteSessionToken.init()
+    self.fetcher.provide(self.token)
+  }
+
   private func findPlaces(from query: String, config: RequestConfig?, promise: Promise) {
     let placesDelegate = PlacesDelegate(resultHandler: self)
     fetcher.delegate = placesDelegate
@@ -53,13 +58,14 @@ public class ExpoGooglePlacesAutocompleteModule: Module, PlacesResultHandler {
                                               UInt(GMSPlaceField.addressComponents.rawValue)
     )
 
-    GMSPlacesClient.shared().fetchPlace(fromPlaceID: id, placeFields: fields, sessionToken: nil) { place, error in
+    GMSPlacesClient.shared().fetchPlace(fromPlaceID: id, placeFields: fields, sessionToken: self.token) { place, error in
       if let error = error {
         promise.reject(error)
         return
       }
 
       if let place = place {
+        self.newAutocompleteSession()
         let result = Mappers.mapFromPlace(place: place)
         promise.resolve(result)
       }
