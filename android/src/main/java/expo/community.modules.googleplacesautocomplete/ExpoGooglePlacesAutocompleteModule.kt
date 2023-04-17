@@ -17,8 +17,8 @@ class ExpoGooglePlacesAutocompleteModule : Module() {
     private val context: Context
         get() = appContext.reactContext ?: throw Exceptions.ReactContextLost()
     private lateinit var placesClient: PlacesClient
-    private val token = AutocompleteSessionToken.newInstance()
-    private val request =
+    private var token = AutocompleteSessionToken.newInstance()
+    private var request =
         FindAutocompletePredictionsRequest.builder()
             .setSessionToken(token)
 
@@ -39,10 +39,22 @@ class ExpoGooglePlacesAutocompleteModule : Module() {
         }
     }
 
+    private fun newAutocompleteRequest() {
+        token = AutocompleteSessionToken.newInstance()
+        request.setSessionToken(token)
+    }
+
     private fun findPlaces(query: String, config: RequestConfig?, promise: Promise) {
-        request.query = query
-        request.countries = config?.countries ?: emptyList()
-        request.typesFilter = config?.types ?: emptyList()
+        request.setQuery(query)
+
+        if (config != null) {
+            if (config.types.orEmpty().isNotEmpty()) {
+                request.setTypesFilter(config.types)
+            }
+            if (config.countries.orEmpty().isNotEmpty()) {
+                request.setCountries(config.countries)
+            }
+        }
 
         placesClient.findAutocompletePredictions(request.build())
             .addOnSuccessListener { response ->
@@ -67,10 +79,14 @@ class ExpoGooglePlacesAutocompleteModule : Module() {
             Place.Field.ADDRESS_COMPONENTS
         )
 
-        val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+        val request =
+            FetchPlaceRequest.builder(placeId, placeFields)
+                .setSessionToken(token)
+                .build()
 
         placesClient.fetchPlace(request)
             .addOnSuccessListener { response ->
+                newAutocompleteRequest()
                 val place = mapFromPlace(response.place)
                 promise.resolve(place)
             }

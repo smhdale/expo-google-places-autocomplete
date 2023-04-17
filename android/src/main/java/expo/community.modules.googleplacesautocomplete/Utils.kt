@@ -10,7 +10,7 @@ internal fun mapFromPlace(place: Place) = DiscoveredPlace(
     placeId = place.id,
     coordinate = mapFromCoordinate(place.latLng),
     formattedAddress = place.address,
-    addressComponents = place.addressComponents?.asList()?.map { mapFromAddressComponent(it) } ?: emptyList()
+    addressComponents = place.addressComponents?.asList()?.map { it -> mapFromAddressComponent(it) } ?: emptyList()
 )
 
 internal fun mapFromCoordinate(coordinate: LatLng?) = Coordinate(
@@ -31,10 +31,3 @@ internal fun mapFromPrediction(prediction: AutocompletePrediction) = PlaceDetail
     distance = prediction.distanceMeters,
     types = prediction.placeTypes.map { it.name }
 )
-
-
-
-
-
-
-
